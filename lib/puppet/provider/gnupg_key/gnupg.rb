@@ -21,6 +21,16 @@ Puppet::Type.type(:gnupg_key).provide(:gnupg) do
     "gpg #{homedir_option}"
   end
 
+  # Get the fingerprint for the key
+  def fingerprint
+    begin
+      key_data = Puppet::Util::Execution.execute("#{gpg_command} --fingerprint --with-colons #{resource[:key_id]}").split()
+      key_data.find { |key| /fpr/ =~ key }.split(':')[9]
+    rescue Puppet::ExecutionFailure => e
+      raise Puppet::Error, "Could not find fingerprint for key #{resource[:key_id]} for user #{resource[:user]}."
+    end
+  end
+
   def homedir_option
     if resource[:gpg_home].nil?
       ''
@@ -31,9 +41,9 @@ Puppet::Type.type(:gnupg_key).provide(:gnupg) do
 
   def sign_key
     if resource[:sign_key]
-      sign_command = "#{gpg_command} --batch --yes --sign-key #{resource[:key_id]}"
       begin
-        sign_output = Puppet::Util::Execution.execute(sign_command, :uid => user_id, :failonfail => true)
+        sign_command = "#{gpg_command} --batch --yes --quick-sign-key #{get_fingerprint}"
+        sign_output  = Puppet::Util::Execution.execute(sign_command, :uid => user_id, :failonfail => true)
       rescue Puppet::ExecutionFailure => e
         raise Puppet::Error, "Key #{resource[:key_id]} does not exist or could not be signed."
       end
@@ -41,13 +51,6 @@ Puppet::Type.type(:gnupg_key).provide(:gnupg) do
   end
 
   def remove_key
-    begin
-      fingerprint_command = "gpg --fingerprint --with-colons #{resource[:key_id]} | awk -F: '$1 == \"fpr\" {print $10;}'"
-      fingerprint = Puppet::Util::Execution.execute(fingerprint_command, :uid => user_id)
-    rescue Puppet::ExecutionFailure => e
-      raise Puppet::Error, "Could not determine fingerprint for  #{resource[:key_id]} for user #{resource[:user]}: #{fingerprint}"
-    end
-
     if resource[:key_type] == :public
       command = "#{gpg_command} --batch --yes --delete-key #{fingerprint}"
     elsif resource[:key_type] == :private

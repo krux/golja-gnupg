@@ -1,3 +1,9 @@
+2017-09-08 - Scott Brimhall <sbrimhall@salesforce.com> - 1.2.5
+* Update gnupg_key provider to use --quick-sign-key and fingerprint
+  to fix being able to sign keys with multiple text IDs associated
+  with them
+* Improve how fingerprints are retrieved for a key
+
 2017-07-27 - Scott Brimhall <sbrimhall@salesforce.com> - 1.2.4
 * add gpg_home and sign_key parameters & unit tests
 * Update rspec-system tests to support Ubuntu 14, 16, Centos 7
