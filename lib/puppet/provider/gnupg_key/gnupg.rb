@@ -42,7 +42,7 @@ Puppet::Type.type(:gnupg_key).provide(:gnupg) do
   def sign_key
     if resource[:sign_key]
       begin
-        sign_command = "#{gpg_command} --batch --yes --quick-sign-key #{get_fingerprint}"
+        sign_command = "#{gpg_command} --batch --yes --quick-sign-key #{fingerprint}"
         sign_output  = Puppet::Util::Execution.execute(sign_command, :uid => user_id, :failonfail => true)
       rescue Puppet::ExecutionFailure => e
         raise Puppet::Error, "Key #{resource[:key_id]} does not exist or could not be signed."
