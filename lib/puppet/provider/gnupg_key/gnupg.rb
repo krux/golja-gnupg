@@ -34,6 +34,7 @@ Puppet::Type.type(:gnupg_key).provide(:gnupg) do
       begin
         fingerprint_command = "gpg --fingerprint --with-colons #{resource[:key_id]} | awk -F: '$1 == \"fpr\" {print $10;}'"
         fingerprint = Puppet::Util::Execution.execute(fingerprint_command, :uid => user_id)
+        fingerprint.strip!
       rescue Puppet::ExecutionFailure => e
         raise Puppet::Error, "Could not determine fingerprint for  #{resource[:key_id]} for user #{resource[:user]}: #{fingerprint}"
       end
