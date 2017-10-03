@@ -31,7 +31,13 @@ Puppet::Type.type(:gnupg_key).provide(:gnupg) do
 
   def ownertrust_key
     if resource[:ownertrust_key]
-      ownertrust_command = "echo \"#{resource[:key_id]}:#{resource[:ownertrust_key]}:\" | #{gpg_command} --batch --yes --import-owner-trust"
+      begin
+        fingerprint_command = "gpg --fingerprint --with-colons #{resource[:key_id]} | awk -F: '$1 == \"fpr\" {print $10;}'"
+        fingerprint = Puppet::Util::Execution.execute(fingerprint_command, :uid => user_id)
+      rescue Puppet::ExecutionFailure => e
+        raise Puppet::Error, "Could not determine fingerprint for  #{resource[:key_id]} for user #{resource[:user]}: #{fingerprint}"
+      end
+      ownertrust_command = "echo \"#{fingerprint}:#{resource[:ownertrust_key]}:\" | #{gpg_command} --batch --yes --import-ownertrust"
       begin
         sign_output = Puppet::Util::Execution.execute(ownertrust_command, :uid => user_id, :failonfail => true)
       rescue Puppet::ExecutionFailure => e
