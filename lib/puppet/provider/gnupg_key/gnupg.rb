@@ -32,7 +32,7 @@ Puppet::Type.type(:gnupg_key).provide(:gnupg) do
   def ownertrust_key
     if resource[:ownertrust_key]
       begin
-        fingerprint_command = "gpg --fingerprint --with-colons #{resource[:key_id]} | awk -F: '$1 == \"fpr\" {print $10;}'"
+        fingerprint_command = "#{gpg_command} --fingerprint --with-colons #{resource[:key_id]} | awk -F: '$1 == \"fpr\" {print $10;}'"
         Puppet.debug("Fingerprint command was: #{fingerprint_command}")
         fingerprint = Puppet::Util::Execution.execute(fingerprint_command, :uid => user_id)
         fingerprint.strip!
