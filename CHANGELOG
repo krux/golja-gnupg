@@ -1,3 +1,6 @@
+2017-11-15 - Scott Brimhall <sbrimhall@salesforce.com> - 1.3.3
+* Fix gpg command in provider to pass in --homedir if necessary.
+
 2017-10-03 - James Downs <james.downs@salesforce.com> - 1.3.2
 * ownertrust requires fingerprint
 
@@ -54,7 +57,7 @@ Special thanks to Tobias Clemson (https://github.com/tobyclemson)
 * bugfix for https keys
 
 2014-08-17 - Dejan Golja <dejan@golja.org> - 0.0.4
-* Update metadata.json and removed Modulefile due to 
+* Update metadata.json and removed Modulefile due to
   as of Puppet 3.6 the Modulefile has been deprecated
 
 2014-03-16 - Dejan Golja <dejan@golja.org> - 0.0.3
