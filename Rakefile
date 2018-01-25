@@ -1,9 +1,9 @@
 require 'rake'
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
+require 'metadata-json-lint/rake_task'
 
 if RUBY_VERSION >= '2.0'
-  require 'metadata-json-lint/rake_task'
   require 'rubocop/rake_task'
   RuboCop::RakeTask.new
 end
@@ -19,5 +19,4 @@ PuppetLint.configuration.fail_on_warnings = true
 PuppetLint.configuration.ignore_paths = ["pkg/**/*", "vendor/**/*", "spec/**/*"]
 
 desc "Run syntax, lint, and spec tests"
-task :test => [:validate, :lint, :spec]
-
+task :test => [:validate, :lint, :spec, :metadata_lint]

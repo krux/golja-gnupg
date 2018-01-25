@@ -1,25 +1,26 @@
 source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
-puppetversion = ENV.key?('PUPPET_GEM_VERSION') ? ENV['PUPPET_GEM_VERSION'] : '>= 3.8.7'
-facterversion = ENV.key?('FACTER_GEM_VERSION') ? ENV['FACTER_GEM_VERSION'] : '>= 2.4.6'
+puppetversion = ENV.key?('PUPPET_GEM_VERSION') ? ENV['PUPPET_GEM_VERSION'] : '~> 3.8'
+facterversion = ENV.key?('FACTER_GEM_VERSION') ? ENV['FACTER_GEM_VERSION'] : '~> 2.4.6'
 
 group :development, :test do
   gem 'puppet', puppetversion,              :require => false
   gem 'facter', facterversion,              :require => false
-  gem 'rspec-core','~> 3.6.0',              :require => false
   gem 'rspec-puppet',                       :require => false
   gem 'puppetlabs_spec_helper', '>= 1.2.0', :require => false
   gem 'puppet-lint', '>= 1.0.0',            :require => false
   gem 'puppet_facts',                       :require => false
-  gem 'json',                               :require => false
 
   if RUBY_VERSION >= '1.9.3' && RUBY_VERSION < '2.0'
     gem 'rake', '< 12.3.0',                 :require => false
     gem 'public_suffix', '~> 1.4.6',        :require => false
     gem 'nokogiri', '~> 1.6.8',             :require => false
+    # metadata-json-lint > 1.0.0 needs ruby 2.0 or greater
+    gem 'metadata-json-lint', '< 1.0.0',    :require => false
+    gem 'json_pure', '< 2',                 :require => false
+    gem 'json', '< 2',                      :require => false
   elsif RUBY_VERSION >= '2.0' && RUBY_VERSION < '3.0'
     gem 'rake',                             :require => false
-    # metadata-json-lint requires >= 2.0,   :require => false
     gem 'metadata-json-lint',               :require => false
     # rubocop requires ruby >= 2.0
     gem 'rubocop',                          :require => false
