@@ -9,5 +9,5 @@ matrix:
     env: PUPPET_GEM_VERSION="~> 3.8" FACTER_GEM_VERSION="~> 2.4.6"
   - rvm: 2.1.10
     env: PUPPET_GEM_VERSION="~> 4.10"
-  - rvm: 2.4.1
+  - rvm: 2.4.2
     env: PUPPET_GEM_VERSION="~> 5.5"
